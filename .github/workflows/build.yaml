@@ -1,0 +1,20 @@
+on:
+  push:
+    branches: [ "branch/25.08" ]
+name: CI
+jobs:
+  flatpak:
+    name: "Flatpak"
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          bundle: org.freedesktop.Platform.VulkanLayer.gamescope.flatpak
+          manifest-path: org.freedesktop.Platform.VulkanLayer.gamescope.yml
+          cache-key: flatpak-builder-${{ github.sha }}
